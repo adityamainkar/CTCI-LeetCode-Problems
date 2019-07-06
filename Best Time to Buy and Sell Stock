@@ -1,0 +1,14 @@
+class Solution:
+    def maxProfit(self, prices: 'List[int]') -> 'int':
+        if len(prices) ==0:
+            return 0
+        ma, mi = prices[0], prices[0]
+        profit = 0
+        for i in range (0, len(prices)):
+            if (mi > prices[i]):
+                mi = prices[i]
+            if (prices[i] - mi > profit):
+                ma = prices[i]
+                profit = prices[i] - mi
+           # print(profit)
+        return profit
