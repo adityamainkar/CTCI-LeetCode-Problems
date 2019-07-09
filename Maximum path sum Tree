@@ -1,0 +1,33 @@
+Given a non-empty binary tree, find the maximum path sum.
+
+For this problem, a path is defined as any sequence of nodes from some starting node to any node in the tree along the parent-child connections. The path must contain at least one node and does not need to go through the root.
+
+Example 1:
+
+Input: [1,2,3]
+
+       1
+      / \
+     2   3
+
+Output: 6
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    
+    def maxPathSum(self, root: TreeNode) -> int: 
+        self.sum = root.val
+        def dfs(root):
+            if not root: return 0
+            l = dfs(root.left)
+            r = dfs(root.right)
+            self.sum = max(self.sum, root.val + max(l, r), root.val, root.val + l + r)
+            return max(root.val, root.val + max(l, r))
+        return max(dfs(root), self.sum)
