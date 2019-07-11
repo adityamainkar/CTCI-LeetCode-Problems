@@ -1,0 +1,76 @@
+Given a string s, find the longest palindromic subsequence's length in s. You may assume that the maximum length of s is 1000.
+
+Example 1:
+Input:
+
+"bbbab"
+Output:
+4
+
+
+class Solution:
+    def longestPalindromeSubseq(self, s: str) -> int:
+        n = len(s)
+        dp = [1] * n
+        ## O(n) space
+        ##    0 1 2 3 4 5 6 i = 5
+        ##    a b x c x b a
+        #B    3 3 3 1 1 1
+        #A    5 5 3 1 1 1
+        ## 0 1 2 3 4   i = 4 j = 0
+        ## b b b a b
+        ## 3 2 1 1 1 
+        ## 4 3 3 1 1
+        ## we want 2+2 = 4 and not 2+3 = 4. Last b should not be counted 2 times
+        ## 2 + Palindrome of B (bba) B
+        ## Hence we add it to prev and not dp[j]
+        ## tmp = dp[j] right before processing i = 4 and j = 1 from middle bb 
+        tmp = -9
+        for i in range(1, len(s)):
+            prev = dp[i]
+            for j in reversed(range(0, i)):
+                print("i={}; j={};prev={};tmp={} dp= {}".format(i,j,prev,tmp,dp))
+                tmp = dp[j]
+                if(s[j] == s[i]):
+                    dp[j] = 2 + prev if j + 1 <= i - 1 else 2
+                
+                elif((s[j] != s[i])):
+                    dp[j] = max(dp[j], dp[j+1])
+                prev = tmp
+            
+        return dp[0]
+        
+        i=1; j=0;prev=1;tmp=-9 dp= [1, 1, 1, 1, 1]
+i=2; j=1;prev=1;tmp=1 dp= [2, 1, 1, 1, 1]
+i=2; j=0;prev=1;tmp=1 dp= [2, 2, 1, 1, 1]
+i=3; j=2;prev=1;tmp=2 dp= [3, 2, 1, 1, 1]
+i=3; j=1;prev=1;tmp=1 dp= [3, 2, 1, 1, 1]
+i=3; j=0;prev=2;tmp=2 dp= [3, 2, 1, 1, 1]
+i=4; j=3;prev=1;tmp=3 dp= [3, 2, 1, 1, 1]
+i=4; j=2;prev=1;tmp=1 dp= [3, 2, 1, 1, 1]
+i=4; j=1;prev=1;tmp=1 dp= [3, 2, 3, 1, 1]
+i=4; j=0;prev=2;tmp=2 dp= [3, 3, 3, 1, 1]
+
+
+
+Using Recusrion time exceeds: 
+
+class Solution:
+    def longestPalindromeSubseq(self, s: str) -> int:
+        if(len(s) ==0):
+            return 0
+        self.l = 0
+        def findmax(x):
+            if(len(x) ==0):
+                return 0
+            if(len(x) ==1):
+                return 1
+            if(x[0] == x[-1]):
+                k = len(x)
+                return 2 + findmax(x[1:k-1])
+            else:
+                k = len(x)
+                return max(findmax(x[1:k]), (findmax(x[:k-1])))
+            
+        return findmax(s)
+    
