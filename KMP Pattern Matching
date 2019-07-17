@@ -58,7 +58,7 @@ def computeLPSArray(pat, M, lps):
             # AAACAAAA and i = 7. The idea is similar  
             # to search step. 
             if k != 0: 
-                len = lps[k-1] 
+                k = lps[k-1] 
   
                 # Also, note that we do not increment i here 
             else: 
