@@ -1,0 +1,35 @@
+5. Longest Palindromic Substring
+Medium
+
+Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
+
+Example 1:
+
+Input: "babad"
+Output: "bab"
+Note: "aba" is also a valid answer.
+
+Observe that a palindrome mirrors around its center. Therefore, a palindrome can be expanded from its center, 
+and there are only 2n - 12n−1 such centers.
+
+You might be asking why there are 2n - 1 but not n centers? The reason is the center of a palindrome can be in between two letters. 
+Such palindromes have even number of letters (such as "abba") and its center are between the two 'b's.
+
+Time complexity : O(n^2)Since expanding a palindrome around its center could take O(n)O(n) time, 
+Space complexity : O(1).
+
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        result = ''
+        for i in range(0,len(s)):
+            odd = self.expandaround(s,i,i)   #aba
+            even = self.expandaround(s,i,i+1) #abba
+            result = max(result, odd, even, key=len) 
+            #print('res={}'.format(result))
+        return result
+    
+    def expandaround(self, st , a ,b):
+        while (0<=a and b < len(st) and st[a]==st[b]):
+                a-=1;
+                b+=1
+        return st[a+1:b]
