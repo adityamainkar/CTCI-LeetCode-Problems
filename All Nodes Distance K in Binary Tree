@@ -1,0 +1,74 @@
+All Nodes Distance K in Binary Tree
+Medium
+
+847
+
+17
+
+Favorite
+
+Share
+We are given a binary tree (with root node root), a target node, and an integer value K.
+
+Return a list of the values of all nodes that have a distance K from the target node.  
+The answer can be returned in any order.
+
+ 
+
+Example 1:
+
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], target = 5, K = 2
+
+Output: [7,4,1]
+
+We first do a depth first search where we annotate every node with information about it's parent.
+
+After, we do a breadth first search to find all nodes a distance K from the target.
+
+Time Complexity: O(N), where N is the number of nodes in the given tree.
+
+Space Complexity: O(N)
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def distanceK(self, root, target, K):
+        """
+        :type root: TreeNode
+        :type target: TreeNode
+        :type K: int
+        :rtype: List[int]
+        """
+        def dfs(node, par = None):
+            if node:
+                node.par = par
+                dfs(node.left, node)
+                dfs(node.right, node)     
+            
+        dfs(root)        
+        seen,q ={target},collections.deque([(target, 0)])
+        
+        while(q):
+            if q[0][1] == K:
+                return [node.val for node, d in q]
+            node,l = q.popleft()
+            
+            if(node.left is not None):
+                if (node.left not in seen):
+                    seen.add(node.left)
+                    q.append((node.left,l+1))
+            if(node.right is not None):
+                if (node.right  not in seen):
+                    seen.add(node.right)
+                    q.append((node.right,l+1))
+            if(node.par is not None):
+                if (node.par not in seen):
+                    seen.add(node.par)
+                    q.append((node.par,l+1))
+        
+        return []
