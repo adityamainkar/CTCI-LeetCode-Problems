@@ -1,0 +1,50 @@
+Normal palindrome is defined as a string that reads the same backwards as forwards, for example "abccba".
+Chunked palindrome is defined as a string that you can split into chunks and it will form a palindrome.
+For example, "volvo". You can split it into (vo)(l)(vo). Let A = "vo", B = "l", so the original string is ABA which is a palindrome.
+
+Given a string str, find the maximum number of chunks we can split that string to get a chuncked palindrome.
+
+Example 1:
+
+Input: "valve"
+Output: 1
+Explanation: You can't split it into multiple chunks so just return 1 (valve)
+Example 2:
+
+Input: "voabcvo"
+Output: 3
+Explanation: (vo)(abc)(vo)
+
+
+Time Complexity: O(N) 
+
+def palin(s):
+	front,back = 0, len(s)-1
+	front_s = back_s = ""
+	total, new_val = 0,0
+	while front < back:    
+		new_val = 0    
+		front_s += s[front]
+		back_s = s[back] + back_s
+		if front_s == back_s:
+			total += 2
+			front_s = back_s = ""
+			new_val = 1
+		front += 1
+		back -= 1
+	return total +1 if (front == back or new_val == 0) else total
+## vovo its total, vobvo its total +1, voABvo its total+1
+
+print(palin("abcxyz"))
+print(palin("vollllvo"))
+print(palin("vovo"))
+print(palin("volvolvo"))
+print(palin("volvol"))
+print(palin("aaaaaa"))
+
+1
+6
+2
+5
+2
+6
