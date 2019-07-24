@@ -1,0 +1,39 @@
+785.Is Graph Bipartite?
+Given an undirected graph, return true if and only if it is bipartite.
+
+Recall that a graph is bipartite if we can split it's set of nodes into two independent subsets A and B such that every edge in the graph has one node in A and another node in B.
+
+The graph is given in the following form: graph[i] is a list of indexes j for which the edge between nodes i and j exists.  
+Each node is an integer between 0 and graph.length - 
+1.  There are no self edges or parallel edges: graph[i] does not contain i, and it doesn't contain any element twice.
+
+For each uncolored node, we'll start the coloring process by doing a depth-first-search on that node. Every neighbor gets colored the opposite color from the current node. 
+If we find a neighbor colored the same color as the current node, then our coloring was impossible.
+
+To perform the depth-first search, we use a stack. For each uncolored neighbor in graph[node], we'll color it and add it to our stack, which acts as a sort of "todo list" of nodes to visit next. 
+Our larger loop for start... ensures that we color every node.
+
+Time Complexity O(N+E)
+ NN is the number of nodes in the graph, and EE is the number of edges. 
+ We explore each node once when we transform it from uncolored to colored, traversing all its edges in the process.
+Space: O(N)
+
+class Solution:
+    def isBipartite(self, graph: List[List[int]]) -> bool:
+        color = {}
+        for node in range(len(graph)):
+            if node not in color:
+                stack = [node]
+                color[node] = 0
+                while stack:
+                    node = stack.pop()
+                    for i in graph[node]:
+                        if i not in color:
+                            stack.append(i)
+                            color[i] = color[node] ^ 1
+                    # node 0 : Color 0:1 1:0 2:0 3: 0
+                    # node 1 popped: color[1] == color[2] --> False
+                        elif color[i] == color[node]:
+                            return False
+        
+        return True
