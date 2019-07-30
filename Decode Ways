@@ -1,0 +1,36 @@
+A message containing letters from A-Z is being encoded to numbers using the following mapping:
+
+'A' -> 1
+'B' -> 2
+...
+'Z' -> 26
+Given a non-empty string containing only digits, determine the total number of ways to decode it.
+
+Algo:
+Initialize dp to all 1.
+Look at element 1. If 0 return 0, if not zero, dp[1] = 1 as any other character will give 1 mapping from 1->A to 9->I.
+Then check if dp[i-1:i+1] is in 10 and 26. If so dp[i]=dp[i-1] + dp[i-2]. Example : 1224 (or #1224) should be 
+decoded as [1, 1, 2, 3, 5].
+Else continue with dp[i] = dp[i-1]. 
+
+Time Complexity: O(n)
+Space Complexity: O(n) 
+
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        if not s or s.startswith('0'):
+            return 0
+        dp = [1]*(len(s)+1)       
+        s= '#'+s # Added # so that i in s and dp point to same element.
+        for i in range(2,len(s)):
+            if int(s[i]) ==0:
+                if (s[i-1] =='1') or(s[i-1] =='2'):
+                    dp[i]=dp[i-2] ## case 110, we want [1,1,2,1] hence dp[3] ==dp[1]
+                else:
+                    return 0
+            elif s[i-1] == '1' or (s[i-1] == '2' and s[i] <= '6'):
+                dp[i]=dp[i-1] + dp[i-2]
+            else:
+                dp[i]=dp[i-1]
+        print(dp)
+        return dp[-1]
