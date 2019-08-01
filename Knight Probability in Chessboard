@@ -1,0 +1,44 @@
+On an NxN chessboard, a knight starts at the r-th row and c-th column and attempts to make exactly K moves.
+The rows and columns are 0 indexed, so the top-left square is (0, 0), and the bottom-right square is (N-1, N-1).
+
+A chess knight has 8 possible moves it can make, as illustrated below. Each move is two squares in a cardinal direction, 
+then one square in an orthogonal direction.
+
+Each time the knight is to move, it chooses one of eight possible moves uniformly at random 
+(even if the piece would go off the chessboard) and moves there.
+
+The knight continues moving until it has made exactly K moves or has moved off the chessboard. 
+Return the probability that the knight remains on the board after it has stopped moving.
+
+ 
+
+Example:
+
+Input: 3, 2, 0, 0
+Output: 0.0625
+Explanation: There are two moves (to (1,2), (2,1)) that will keep the knight on the board.
+From each of those positions, there are also two moves that will keep the knight on the board.
+The total probability the knight stays on the board is 0.0625.
+
+Create 2 DP matrices.
+If next move is within chess board then divide the existing probab from dp1 by 8 and assign it to new location in dp2.
+Everytime for new K, this will diminish by 1/8.
+Time Complexity: O(N*N*K)
+
+class Solution:
+    def knightProbability(self, N: int, K: int, r: int, c: int) -> float:
+        dp1= [[0] * N for _ in range(N)]
+        dp2 = [[0] * N for _ in range(N)]
+        dp1[r][c] = 1
+        while(K>0):
+            for i in range(0,N):
+                for j in range(0,N):
+                    for dr, dc in ((2,1),(2,-1),(-2,1),(-2,-1),
+                                   (1,2),(1,-2),(-1,2),(-1,-2)):
+                        if(0 <= (i + dr) < N and 0 <= (j + dc) < N):
+                            dp2[i+dr][j+dc] += dp1[i][j]/8
+            
+            dp1=dp2
+            dp2 = [[0 for i in range(N)] for j in range(N)]
+            K-=1     
+        return sum(map(sum, dp1))
