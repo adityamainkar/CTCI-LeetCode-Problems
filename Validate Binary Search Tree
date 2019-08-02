@@ -1,0 +1,40 @@
+Given a binary tree, determine if it is a valid binary search tree (BST).
+
+Assume a BST is defined as follows:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+The right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and right subtrees must also be binary search trees.
+
+Algo:
+Check as soon as you enter if nodes val is within lower and upper bounds.
+When going left, upper bound is current nodes val. Lower bound do not change.
+When going right, lower bound should be current nodes val. Upper bound do not change.
+
+Time Complexity: O(N)
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+        if root is None:
+            return True
+        stack=[]
+        stack = [(root, float('-inf'), float('inf'))]
+        while(len(stack) > 0):
+            node, lo, hi = stack.pop()
+            #print(node.val)
+            if ((node.val >= hi) or node.val<= lo):
+                return False
+            if node.right is not None: 
+                stack.append((node.right, node.val,hi))
+                
+            if node.left is not None:
+                stack.append((node.left,lo, node.val) )           
+                
+        return True
