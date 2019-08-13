@@ -1,0 +1,42 @@
+There are N cities numbered from 1 to N.
+
+You are given connections, where each connections[i] = [city1, city2, cost] represents the cost to connect 
+city1 and city2 together.  (A connection is bidirectional: connecting city1 and city2 is the same as connecting city2 and city1.)
+
+Return the minimum cost so that for every pair of cities, there exists a path of connections (possibly of length 1) that 
+connects those two cities together.  The cost is the sum of the connection costs used. If the task is impossible, return -1.
+
+Sort connections by cost
+Iterate connections, if union(city1,city2), add cost to ans
+Check if there is only one group of connected components
+Time Complexity: O(N log N)
+Note that Union operation takes constant time when UnionFind is implemented with both path compression and union by rank.
+Space Complexity: O(N)
+
+
+class Solution:
+    def minimumCost(self, N: int, connections: List[List[int]]) -> int:
+        memo = {i:i for i in range(1,N + 1)}
+        ranks = {i:1 for i in range(1,N + 1)}
+        
+        def find(x):
+            if memo[x] != x:
+                memo[x] = find(memo[x])
+            return memo[x]
+        
+        def union(x,y):
+            root_x, root_y = find(x), find(y)
+            if root_x == root_y:
+                return False
+            if ranks[root_x] > ranks[root_y]:
+                root_x, root_y = root_y, root_x
+            memo[root_x] = root_y
+            ranks[root_x] += ranks[root_y]
+            return True
+        
+        ans = 0
+        connections.sort(key = lambda x: x[2])
+        for i,j,k in connections:
+            if union(i,j):
+                ans += k
+        return -1 if len(set(find(x) for x in range(1,N + 1))) > 1 else ans
