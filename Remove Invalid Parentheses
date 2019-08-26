@@ -1,0 +1,41 @@
+Example 1:
+
+Input: "()())()"
+Output: ["()()()", "(())()"]
+
+class Solution:
+    def removeInvalidParentheses(self, s: str) -> List[str]:
+        def count(cur_s):
+            l, r = 0, 0
+            for p in cur_s:
+                if p == "(": l += 1
+                elif p == ")":
+                    if l > 0: 
+                        l -= 1
+                    else: 
+                        r += 1
+            return l, r
+      
+        def valid(cur_s):
+            return count(cur_s) == (0,0)
+      
+        ini_l, ini_r = count(s)
+        res = []
+        def dfs(cur_s, begin, l_remain, r_remain):
+            print("{} {} {}".format(cur_s, l_remain, r_remain))
+            if l_remain == 0 and r_remain == 0:
+                if valid(cur_s): # Else ()())() will also return ()())(
+                    print("aa")
+                    res.append(cur_s)
+            for next_begin in range(begin, len(cur_s)):
+                if next_begin != begin and cur_s[next_begin] == cur_s[next_begin - 1]:
+                #if cur_s[next_begin] == cur_s[next_begin - 1]:
+                    continue
+                if cur_s[next_begin] == "(" and l_remain > 0:
+                    print(' : {}'.format(cur_s[:next_begin] + cur_s[next_begin + 1:]))
+                    dfs(cur_s[:next_begin] + cur_s[next_begin + 1:], next_begin, l_remain - 1, r_remain)
+                if cur_s[next_begin] == ")" and r_remain > 0:
+                    print(' : {}'.format(cur_s[:next_begin] + cur_s[next_begin + 1:]))
+                    dfs(cur_s[:next_begin] + cur_s[next_begin + 1:], next_begin, l_remain, r_remain - 1)
+        dfs(s, 0, ini_l, ini_r)
+        return res
