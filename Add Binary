@@ -1,0 +1,35 @@
+Given two binary strings, return their sum (also a binary string).
+
+The input strings are both non-empty and contains only characters 1 or 0.
+
+Example 1:
+
+Input: a = "11", b = "1"
+Output: "100"
+
+class Solution:
+    def addBinary(self, a: str, b: str) -> str:
+        carry,res = 0,''
+        m = max(len(a),len(b))
+        ra,rb = a[len(a)::-1], b[len(b)::-1]
+        for i in range(0,m):
+            sum1 = carry
+            if(i < len(a)):
+                sum1+= int(ra[i])
+            if(i < len(b)):
+                sum1+= int(rb[i])
+                
+            if sum1 == 0:
+                res,carry = '0'+res,0
+            if sum1 == 1:
+                res,carry = '1'+res,0
+            if sum1 == 2:
+                res,carry = '0'+res,1
+            if sum1 == 3:
+                res,carry = '1'+res,1
+                
+            print(res)    
+        if(carry == 1):
+            res = '1'+str(res)
+        
+        return(str(res))      
