@@ -1,0 +1,83 @@
+Given a string, find the length of the longest substring T that contains at most k distinct characters.
+
+Example 1:
+
+Input: s = "eceba", k = 2
+Output: 3
+Explanation: T is "ece" which its length is 3.
+
+
+
+O(n)
+from collections import defaultdict
+class Solution:
+    def lengthOfLongestSubstringKDistinct(self, s: str, k: int) -> int:
+        n = len(s) 
+        if k == 0 or n == 0:
+            return 0
+        max_len = 0
+        # sliding window left and right pointers
+        left, right = 0, 0
+        # hashmap character -> its rightmost position 
+        # in the sliding window
+        hashmap = defaultdict(int)
+        #print("Entering hashmap",hashmap)
+        while(right<n):
+            if(s[right] in hashmap.keys()):
+                hashmap[s[right]] +=1    
+            else:
+                hashmap[s[right]] =1
+            right += 1
+            #print(hashmap)
+            while(len(hashmap) > k):
+                hashmap[s[left]] -=1
+                if(hashmap[s[left]] == 0):
+                    del(hashmap[s[left]])
+                left+=1
+                #print("Inside",hashmap)
+            max_len = max(max_len, right - left)
+            #print("left = {}, right = {}, {}".format(left,right,max_len))
+            #print(hashmap)
+        return max_len
+        
+        
+        Entering hashmap defaultdict(<class 'int'>, {})
+defaultdict(<class 'int'>, {'e': 1})
+left = 0, right = 1, 1
+defaultdict(<class 'int'>, {'e': 1})
+defaultdict(<class 'int'>, {'e': 2})
+left = 0, right = 2, 2
+defaultdict(<class 'int'>, {'e': 2})
+defaultdict(<class 'int'>, {'e': 2, 'c': 1})
+left = 0, right = 3, 3
+defaultdict(<class 'int'>, {'e': 2, 'c': 1})
+defaultdict(<class 'int'>, {'e': 2, 'c': 2})
+left = 0, right = 4, 4
+defaultdict(<class 'int'>, {'e': 2, 'c': 2})
+defaultdict(<class 'int'>, {'e': 2, 'c': 3})
+left = 0, right = 5, 5
+defaultdict(<class 'int'>, {'e': 2, 'c': 3})
+defaultdict(<class 'int'>, {'e': 3, 'c': 3})
+left = 0, right = 6, 6
+defaultdict(<class 'int'>, {'e': 3, 'c': 3})
+defaultdict(<class 'int'>, {'e': 3, 'c': 3, 'b': 1})
+Inside defaultdict(<class 'int'>, {'e': 2, 'c': 3, 'b': 1})
+Inside defaultdict(<class 'int'>, {'e': 1, 'c': 3, 'b': 1})
+Inside defaultdict(<class 'int'>, {'e': 1, 'c': 2, 'b': 1})
+Inside defaultdict(<class 'int'>, {'e': 1, 'c': 1, 'b': 1})
+Inside defaultdict(<class 'int'>, {'e': 1, 'b': 1})
+left = 5, right = 7, 6
+defaultdict(<class 'int'>, {'e': 1, 'b': 1})
+defaultdict(<class 'int'>, {'e': 1, 'b': 2})
+left = 5, right = 8, 6
+defaultdict(<class 'int'>, {'e': 1, 'b': 2})
+defaultdict(<class 'int'>, {'e': 1, 'b': 3})
+left = 5, right = 9, 6
+defaultdict(<class 'int'>, {'e': 1, 'b': 3})
+defaultdict(<class 'int'>, {'e': 1, 'b': 4})
+left = 5, right = 10, 6
+defaultdict(<class 'int'>, {'e': 1, 'b': 4})
+defaultdict(<class 'int'>, {'e': 1, 'b': 4, 'a': 1})
+Inside defaultdict(<class 'int'>, {'b': 4, 'a': 1})
+left = 6, right = 11, 6
+defaultdict(<class 'int'>, {'b': 4, 'a': 1})
