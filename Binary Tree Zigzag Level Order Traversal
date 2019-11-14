@@ -1,0 +1,84 @@
+Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
+
+For example:
+Given binary tree [3,9,20,null,null,15,7],
+    3
+   / \
+  9  20
+    /  \
+   15   7
+return its zigzag level order traversal as:
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+
+
+dfs + 1 stack
+def zigzagLevelOrder(self, root):
+    # write your code here
+    res, stack = [], [(root, 0)]
+    while stack:
+        cur, level = stack.pop()
+        if cur:
+            if len(res) < level + 1:
+                res.append([])
+            if level % 2 == 0:
+                res[level].append(cur.val)
+            else:
+                res[level].insert(0, cur.val)
+            stack.append((cur.right, level+1))
+            stack.append((cur.left, level+1))
+    return res
+
+Using dequeue:
+
+def zigzagLevelOrder(self, root):
+    queue = collections.deque([root])
+    res = []
+    while queue:
+        r = []
+        for _ in range(len(queue)):
+            q = queue.popleft()
+            if q:
+                r.append(q.val)
+                queue.append(q.left)
+                queue.append(q.right)
+        r = r[::-1] if len(res) % 2 else r
+        if r:
+            res.append(r)
+    return res
+
+
+Aditya with 2 stacks:: 
+class Solution:
+    def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
+        if root is None: return []
+        stack1, stack2 ,result,res= [],[],[],[]
+        stack1.append(root)
+        while(True):
+            while(len(stack1) > 0):
+                temp = stack1.pop()
+                res.append(temp.val)
+                if(temp.left is not None):
+                    stack2.append(temp.left)
+                if(temp.right is not None):
+                    stack2.append(temp.right)
+            if len(res) > 0:
+                result.append(res)
+            res=[]
+            while(len(stack2) > 0):
+                temp = stack2.pop()
+                res.append(temp.val)
+                if(temp.right is not None):
+                    stack1.append(temp.right)
+                if(temp.left is not None):
+                    stack1.append(temp.left)
+            if len(res) > 0:
+                result.append(res)
+            res=[]
+            if (len(stack2) ==0) and (len(stack1) ==0) :
+                break
+        return result
+            
