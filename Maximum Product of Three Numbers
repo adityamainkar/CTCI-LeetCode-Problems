@@ -1,0 +1,31 @@
+Given an integer array, find three numbers whose product is maximum and output the maximum product.
+
+nlogn sorting
+class Solution:
+    def maximumProduct(self, nums: List[int]) -> int:
+        nums.sort()
+        p1 = nums[-1]*nums[-2]*nums[-3]
+        p2 = nums[0] * nums[1]*nums[-1]
+        return max(p1,p2)
+ 
+ Method 2: O(n) find 2 smallest and 3 largest elements.
+ 
+ ans = first = second = third = float("-inf")
+        last = secLast = float("inf")
+        for num in nums:
+            if num > first:
+                third = second
+                second = first
+                first = num
+            else num > second:
+                third = second
+                second = num
+            elif num > third:
+                third = num
+            if num < last:
+                secLast = last
+                last = num
+            elif num < secLast:
+                secLast = num
+        return max(first * second * third, last * secLast * first)
+        
